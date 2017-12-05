@@ -28,7 +28,7 @@ public:
         trace_log_name_("trace"),
         oss_log_name_("oss"),
         stat_log_name_("statistics") {
-        snprintf(strErrDes, LOG_ERROR_STRING_LEN, "not Init");
+        snprintf(err_string, LOG_ERROR_STRING_LEN, "not Init");
     }
 
     ~VGameLog() {
@@ -43,7 +43,7 @@ public:
     int InitCategory();
     //错误描述
     const char* GetErrMsg() {
-        return strErrDes;
+        return err_string;
     }
 
     static std::string FormatTimeStr() {
@@ -84,7 +84,7 @@ public:
     std::string stat_log_name_;
     //记录错误日志
     static const int LOG_ERROR_STRING_LEN = 256;
-    char strErrDes[LOG_ERROR_STRING_LEN];
+    char err_string[LOG_ERROR_STRING_LEN];
 };
 
 }/*end of namespace vgame*/
