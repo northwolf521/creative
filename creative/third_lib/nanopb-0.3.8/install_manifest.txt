@@ -1,0 +1,11 @@
+/usr/local/lib/python2.7/site-packages/nanopb_pb2.py
+/usr/local/lib/python2.7/site-packages/plugin_pb2.py
+/usr/local/lib64/libprotobuf-nanopb.a
+/usr/local/lib/cmake/nanopb/nanopb-targets.cmake
+/usr/local/lib/cmake/nanopb/nanopb-targets-noconfig.cmake
+/usr/local/lib/cmake/nanopb/nanopb-config.cmake
+/usr/local/lib/cmake/nanopb/nanopb-config-version.cmake
+/usr/local/include/pb.h
+/usr/local/include/pb_common.h
+/usr/local/include/pb_encode.h
+/usr/local/include/pb_decode.h

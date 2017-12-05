@@ -1,0 +1,273 @@
+import "nanopb.proto";
+
+//请求头部消息
+message WebReqHeader
+{
+	required uint32 guid = 1;
+	required uint32 time = 2;
+}
+
+//处理响应消息
+message WebRspResult
+{
+    required uint32 guid = 1; //请求序号
+    required string msg  = 2 [(nanopb).max_size = 1024]; //返回结果
+}
+
+//设置玩家等级
+message WebReqSetLevel
+{
+    required WebReqHeader header   = 1; //请求信息
+    required uint64       playerid = 2; //玩家标识
+    required uint32       level    = 3; //玩家等级
+}
+
+//增加玩家经验
+message WebReqAddExp
+{
+    required WebReqHeader header   = 1; //请求信息
+    required uint64       playerid = 2; //玩家标识
+    required uint32       exp      = 3; //经验数值
+}
+
+//增加碎片
+message WebReqAddChip
+{
+    required WebReqHeader header   = 1; //请求信息
+    required uint64       playerid = 2; //玩家标识
+	required uint32		  id	   = 3;	//碎片id
+    required int32        num      = 4; //碎片数值
+}
+
+//增加道具
+message WebReqAddItem
+{
+    required WebReqHeader header   = 1; //请求信息
+    required uint64       playerid = 2; //玩家标识
+	required uint32		  id	   = 3;	//道具id
+    required int32        num      = 4; //道具数值
+}
+
+//增加觉醒道具
+message WebReqAddAwakenItem
+{
+    required WebReqHeader header   = 1; //请求信息
+    required uint64       playerid = 2; //玩家标识
+	required uint32		  id	   = 3;	//id
+    required int32        num      = 4; //数值
+}
+
+//增加联盟经验
+message WebReqAddLegionExp
+{
+    required WebReqHeader header   = 1; //请求信息
+    required uint64       playerid = 2; //玩家标识
+    required uint32       exp      = 3; //经验数值
+}
+
+//通用重置
+message WebReqReset
+{
+    required WebReqHeader header   = 1; //请求信息
+    required uint64       playerid = 2; //玩家标识
+    required uint32       type     = 3; //重置类型
+}
+
+//后台踢掉玩家
+message WebReqKickRole
+{
+    required WebReqHeader header   = 1; //请求信息
+    required uint64       playerid = 2; //玩家标识
+}
+
+//修改货币
+message WebReqRecharge 
+{
+    required WebReqHeader header   	= 1; //请求信息
+    required uint64       playerid 	= 2; //玩家标识
+    required string       id 		= 3 [(nanopb).max_size = 256]; //id
+    required uint32       yb	   	= 4; //元宝
+    required uint32       money		= 5; //银两
+    required uint32       vipscore	= 6; //vip积分
+}
+
+//清除首次充值
+message	WebReqClearFirstCharge 
+{
+    required WebReqHeader header   	= 1; //请求信息
+    required uint64       playerid 	= 2; //玩家标识
+}
+
+//清除玩家月卡
+message WebReqClearMonthCard 
+{
+    required WebReqHeader header   	= 1; //请求信息
+    required uint64       playerid 	= 2; //玩家标识
+}
+
+//设置月卡过期
+message WebReqExpireMonthCard 
+{
+    required WebReqHeader header   	= 1; //请求信息
+    required uint64       playerid 	= 2; //玩家标识
+    required uint32       days      = 3; //天数
+}
+
+//更新系统公告
+message WebReqMakeAnno
+{
+    required WebReqHeader header   = 1; //请求信息
+    required uint32       add      = 2; //是否增加
+    required uint32       times    = 3; //播放次数
+    required uint32       interval = 4; //播放间隔
+    required string       content  = 5 [(nanopb).max_size = 1024]; //播放内容
+    required uint32       partid   = 6; //所属小区
+}
+
+//玩家重置玩法商店
+message WebReqResetPlayShop
+{
+    required WebReqHeader header   = 1; //请求信息
+    required uint64       playerid = 2; //玩家标识
+    required int32        type     = 3; //商店类型
+}
+
+//服务配置重载通知
+message WebReqReloadServer
+{
+    required WebReqHeader header   = 1; //请求信息
+    required int32        partid   = 2; //小区编号
+    required int32        region   = 3; //大区编号
+}
+
+//禁止玩家发言
+message WebReqPlayerMute
+{
+    required WebReqHeader header   = 1; //请求信息
+    required uint64       playerid = 2; //玩家标识
+    required int32        mute     = 3; //禁言标志
+}
+
+//设置关卡章节入口
+message WebReqSetRaidGate
+{
+    required WebReqHeader header   = 1; //请求信息
+    required uint64       playerid = 2; //玩家标识
+    required int32        chapter  = 3; //章节标识
+    required int32        gate     = 4; //入口标识
+}
+
+//后台活动更新通知
+message WebReqAcivityUpdate
+{
+    required WebReqHeader header   = 1; //请求信息
+    required int32        state    = 2; //操作状态(0-更新，1-删除) 
+    repeated int32        actid    = 3 [(nanopb).max_count = 1024];//活动列表
+}
+
+//清除玩家当前战斗
+message WebReqResetBattle
+{
+    required WebReqHeader header   = 1; //请求信息
+    required uint64       playerid = 2; //玩家标识
+}
+
+//支付验证
+message WebReqPayCheck
+{
+    required WebReqHeader header   = 1; //请求信息
+    required uint64       playerid = 2; //玩家标识
+    required string       product  = 3 [(nanopb).max_size = 64]; //商品ID
+    required int32        way      = 4;
+    required int32        wayarg   = 5;
+}
+
+//支付回调
+message WebReqPayConfirm
+{
+    required WebReqHeader header   = 1; //请求信息
+    required uint64       playerid = 2; //玩家标识
+    required string       order    = 3 [(nanopb).max_size = 64]; //订单号
+    required string       product  = 4 [(nanopb).max_size = 64]; //商品ID
+    required uint32       yb       = 5;
+    required uint32       money    = 6; 
+    required uint32       vipscore = 7;
+    required int32        way      = 8;
+    required int32        wayarg   = 9;
+}
+
+//CDK
+message WebReqUseCDK
+{
+    required WebReqHeader header   = 1; //请求信息
+    required uint64       playerid = 2; //玩家标识
+    required string       cdkey    = 3 [(nanopb).max_size = 64];
+    repeated uint32       types    = 4 [(nanopb).max_count = 8];
+    repeated uint32       ids      = 5 [(nanopb).max_count = 8];
+    repeated uint32       nums     = 6 [(nanopb).max_count = 8];
+}
+
+//邮件
+message WebReqSendMail
+{
+    required WebReqHeader header   = 1; //请求信息
+    required uint64       playerid = 2; //玩家标识
+    required string       sender   = 3 [(nanopb).max_size = 64];
+    required string       title    = 4 [(nanopb).max_size = 64];
+    required string       content  = 5 [(nanopb).max_size = 128];
+    repeated uint32       types    = 6 [(nanopb).max_count = 8];
+    repeated uint32       ids      = 7 [(nanopb).max_count = 8];
+    repeated uint32       nums     = 8 [(nanopb).max_count = 8];
+}
+
+//修改玩家属性
+message WebReqChangeAttr
+{
+    required WebReqHeader header   = 1; //请求信息
+    required uint64       playerid = 2; //玩家标识
+    required uint32       attrid   = 3;
+    required int32        num      = 4; 
+}
+
+//修改引导
+message WebReqSetGuildIdx
+{
+    required WebReqHeader header   = 1; //请求信息
+    required uint64       playerid = 2; //玩家标识
+    required uint32       guildidx = 3;
+}
+
+//添加精灵
+message WebReqAddHero
+{
+    required WebReqHeader header   = 1; //请求信息
+    required uint64       playerid = 2; //玩家标识
+    required uint32       id       = 3;
+    required uint32       num      = 4;
+}
+
+//添加装备
+message WebReqAddEquip
+{
+    required WebReqHeader header   = 1; //请求信息
+    required uint64       playerid = 2; //玩家标识
+    required uint32       id       = 3;
+    required int32        num      = 4;
+}
+
+//添加珍宝
+message WebReqAddTreasure
+{
+    required WebReqHeader header   = 1; //请求信息
+    required uint64       playerid = 2; //玩家标识
+    required uint32       id       = 3;
+    required int32        num      = 4;
+}
+
+//清空背包
+message WebReqClearBag
+{
+    required WebReqHeader header   = 1; //请求信息
+    required uint64       playerid = 2; //玩家标识
+    required uint32       bagtype  = 3;
+}

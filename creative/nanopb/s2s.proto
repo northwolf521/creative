@@ -1,0 +1,1795 @@
+import "nanopb.proto";
+
+message ResExample
+{
+    required uint32 itemID   = 1;
+    required uint32 itemNum  = 2;
+    optional uint32 itemRate = 3;
+}
+
+message NanopbExample
+{
+   required uint32     value1 = 1;
+   optional string     value2 = 2 [(nanopb).max_size  = 100];
+   repeated uint32     value3 = 3 [(nanopb).max_count = 100];
+   optional ResExample value4 = 4;
+   repeated ResExample value5 = 5 [(nanopb).max_count = 100];
+}
+
+message NanopbShopPlayData
+{
+    required uint64 reset_ts        = 1;
+    repeated uint32 item_ids        = 2 [(nanopb).max_count = 200];
+    repeated uint32 item_buy_times  = 3 [(nanopb).max_count = 200];
+}
+
+message NanopbShopPlayDataSaveReq
+{
+    required NanopbShopPlayData info = 1;
+}
+
+message NanopbShopPlayDataQueryReq
+{
+}
+
+message NanopbShopPlayDataQueryAck
+{
+    required NanopbShopPlayData info = 1;
+}
+
+enum CHALLENGE_STATE
+{
+    NONE = 0; //从未挑战
+    FAIL = 1; //挑战失败
+    SUCC = 2; //挑战成功
+}
+
+enum RESET
+{
+    CHALLENGE_SUCC = 0; //重置挑战成功
+    CHALLENGE_FULL = 1; //重置全部对手
+}
+
+//竞技机器信息
+message ArenaRobotEntity
+{
+    required int64  playerid  = 1;
+    required int64  userid    = 2;
+    required string nickname  = 3  [(nanopb).max_size = 32];
+    required int32  head      = 4;
+    required int32  partid    = 5;
+    required int32  power     = 6;
+    required int32  guildid   = 7;
+    required string guildname = 8  [(nanopb).max_size = 32];
+    required int32  viplv     = 9;
+    required int32  teamlv    = 10;
+    required int32  state     = 11;
+    required int32  ranking   = 12;
+}
+
+//竞技对手信息
+message ArenaOpponentEntity
+{
+    required int64  playerid  = 1;
+    required int64  userid    = 2;
+    required string nickname  = 3  [(nanopb).max_size = 32];
+    required int32  head      = 4;
+    required int32  partid    = 5;
+    required int32  power     = 6;
+    required int32  guildid   = 7;
+    required string guildname = 8  [(nanopb).max_size = 32];
+    required int32  viplv     = 9;
+    required int32  teamlv    = 10;
+    required int32  state     = 11;
+    required int32  ranking   = 12;
+    required int32  integral  = 13;
+}
+
+//竞技对手信息列表
+message NanopbArenaOpponentList
+{
+    repeated ArenaOpponentEntity list = 1 [(nanopb).max_count = 5];
+}
+
+//属性标识信息
+message NanopbAttr
+{
+    required int32 idx = 1;
+    required int32 val = 2;
+}
+
+//属性列表
+message NanopbAttrList
+{
+    repeated NanopbAttr list = 1 [(nanopb).max_count = 36];
+}
+
+//竞技挑战记录中的上阵精灵简易信息
+message ArenaRecordEntityCard
+{
+	required uint32 card_id   = 1;
+	required uint32 lv   	  = 2;
+	required uint32 star      = 3;
+}
+
+//竞技挑战记录
+message ArenaRecordEntity
+{
+    required int64  playerid  			= 1;
+    required int64  userid    			= 2;
+    required string nickname  			= 3  [(nanopb).max_size = 32];
+    required int32  head      			= 4;
+    required int32  partid    			= 5;
+    required int32  power     			= 6;
+    required int32  guildid   			= 7;
+    required string guildname 			= 8  [(nanopb).max_size = 32];
+    required int32  viplv     			= 9;
+    required int32  teamlv    			= 10;
+    required int32  challtime 			= 11;
+    required int32  challres  			= 12;
+    required int32  integral  			= 13;
+    required int32  tempint   			= 14;
+	repeated ArenaRecordEntityCard list = 15 [(nanopb).max_count = 6];
+}
+
+//竞技挑战记录列表
+message NanopbArenaRecordList
+{
+    repeated ArenaRecordEntity list = 1 [(nanopb).max_count = 10];
+}
+
+//竞技基本信息
+message NanopbPlayerArena
+{
+    required int32 integral          = 1;  //竞技积分
+    required int32 flag 			 = 2;  //每周第一次进入竞技场标志
+    required int32 challengeTimes    = 3;  //可用挑战次数
+    required int32 maxChallengeTimes = 4;  //可用挑战次数上限
+    required int32 resetDataTime     = 5;  //挑战次数恢复时间戳
+    required int32 lastChallengeTime = 6;  //最近挑战时间戳
+    required int32 topranking        = 7;  //当前竞技排名
+    required int32 highestRank       = 8;  //排名最高排名
+    required int32 challengeCount    = 9;  //某段时间总挑战次数
+    required int32 succCount         = 10; //某段时间总战胜次数
+    required int32 serCount          = 11; //某段时间连胜次
+    required int32 dailyResetTimes   = 12; //每日刷新次数
+    required int32 dailyBuyTimes     = 13; //每日购买次数
+    required int32 lastResetTime     = 14; //刷新重置时间戳
+    required int32 highestIntegral   = 15; //排名最高积分
+    required int32 first_battle      = 16; //第一次竞技标志
+    required int32 is_open           = 17; //功能开启标志
+    required int32 rewardTime		 = 18; //每日发奖时间戳
+}
+
+//竞技对手信息列表
+message NanopbOpponentList
+{
+    repeated ArenaOpponentEntity list = 1 [(nanopb).max_count = 10];
+}
+
+//资源描述
+message ResEntity
+{
+    required int32 type   = 1;
+    required int32 resid  = 2;
+    required int32 resnum = 3;
+}
+
+//资源信息列表
+message ResEntityList
+{
+    repeated ResEntity list = 1 [(nanopb).max_count = 50];
+}
+
+//战术信息
+message TacticsEntity
+{
+    required int32 position = 1;
+    required int32 skillid  = 2;
+}
+
+//战术信息列表
+message TacticsEntityList
+{
+    repeated TacticsEntity list = 1 [(nanopb).max_count = 24];
+}
+
+message NanopbSocialBaseData
+{
+    required string     names = 1[(nanopb).max_size = 64];
+    required uint32     level = 2;
+    required uint32     viplv = 3;
+    required uint64     fight_power = 4;
+    required string     color = 5[(nanopb).max_size = 8];
+    required uint32     role_id = 6;
+    required uint32     donate_box = 7;
+    required uint32     donate_id = 8;
+    repeated uint32     legion_skill = 9[(nanopb).max_count = 10];
+    required uint64     legion_id = 10;
+    required uint32     legion_out_ts = 11;
+    required uint32     legion_devote = 12;
+    required uint32     legion_task_draw_times = 13;
+}
+
+//漏窟地图格子
+message CavernBuffEntity
+{
+    required int32 buff  = 1;
+    required int32 state = 2;
+}
+
+//漏窟地图格子
+message CavernGridEntity
+{
+    required int32            index = 1;                         //地块标识
+    required int32            board = 2;                         //板子标识
+    required int32            state = 3;                         //元素状态
+    required int32            resId = 4;                         //资源标识
+    repeated CavernBuffEntity buff  = 5[(nanopb).max_count = 5]; //buff列表
+}
+
+//洞窟基础数据
+message CavernBaseEntity
+{
+    required int32 coin            = 1;
+    required int32 highest         = 2;
+    required int32 layerLv         = 3;
+    required int32 killNum         = 4;
+    required int64 resetTime       = 5;
+    required int32 costTimes       = 6;
+    required int32 hasKeys         = 7;
+    required int32 attackPercentum = 8;
+    required int32 hitPercentum    = 9;  
+    required int32 critPercentum   = 10;   
+    required int32 harmPercentum   = 11;
+    required int32 slefRank        = 12;
+    required int32 accCoin         = 13;
+    required int32 accBoard        = 14;
+    required int32 boardPersp      = 15;
+    required int32 totalKillNum    = 16;
+    required int32 totalBoard      = 17;
+    required int64 totalCoin       = 18;
+}
+
+//洞窟背包格子
+message CavernBagGridEntity
+{
+    required int32 resId   = 1;
+    required int32 resNum  = 2;
+    required int32 resType = 3;
+}
+
+//洞窟布阵格子
+message CavernEmbattleEntity
+{
+    required int64 guid = 1;
+}
+
+//玩家洞窿数据
+message NanopbCavernData
+{
+    required CavernBaseEntity     info       = 1;
+    repeated CavernGridEntity     grid       = 2 [(nanopb).max_count = 30];
+    repeated CavernBagGridEntity  bag        = 3 [(nanopb).max_count = 15];
+    repeated CavernEmbattleEntity emb        = 4 [(nanopb).max_count = 6];
+    required int32                boxLayer   = 5;
+    required int32                boxDropId  = 6;
+    required int32                rewardOver = 7;
+    repeated int32                skillids   = 8 [(nanopb).max_count = 20];
+}
+
+//洞窟地块列表
+message NanopbCavernGrid
+{
+    repeated CavernGridEntity list       = 1 [(nanopb).max_count = 30];
+    required int32            boxLayer   = 2;
+    required int32            boxDropId  = 3;
+    required int32            rewardOver = 4;
+    repeated int32            skillids   = 5 [(nanopb).max_count = 20];
+}
+
+//洞窟布阵列表
+message NanopbCavernEmbattle
+{
+    repeated CavernEmbattleEntity list = 1 [(nanopb).max_count = 6];
+}
+
+//洞窟背包数据
+message NanopbCavernBagData
+{
+    repeated CavernBagGridEntity list = 1 [(nanopb).max_count = 15];
+}
+
+//精灵性格培养信息
+message NanopbCharacterCultureInfo
+{
+    required uint32  state             = 1;     // 性格培养状态
+    required uint64  guid              = 2;     // 精灵guid
+    required uint32  itemId            = 3;     // 精灵性格培养道具ID
+    required uint32  endTime           = 4;     // 精灵性格培养结束时间
+    required uint32  characterId       = 5;     // 当前拥有的性格ID 
+    required uint32  gianCharacterId   = 6;     // 培养结束后获得的性格ID
+}
+
+//精灵性格培养列表
+message PokemonCharacterCultureList
+{
+    repeated NanopbCharacterCultureInfo list = 1 [(nanopb).max_count = 4];
+}
+
+//精灵牧场捕获槽
+message NanopbCaptureSlotData 
+{
+    required uint32 state             = 1;            // 捕获槽状态
+    required uint32 pokemonId         = 2;            // 精灵Id
+    required uint32 flee_ts           = 3;            // 精灵逃走时间
+    required uint32 appear_group_id   = 4;            // 精灵出现组ID
+    required uint32 fleePokemonId     = 5;            // 上次逃走精灵ID
+}
+
+//精灵牧场信息
+message NanopbPokemonPastureData 
+{
+    required uint32 pastureId                      = 1;                            // 精灵牧场Id
+    required uint32 state                          = 2;                            // 精灵牧场状态
+    repeated NanopbCaptureSlotData captureSlotInfo = 3 [(nanopb).max_count = 3];   // 捕获槽信息
+    repeated uint64 selectPokemon                  = 4 [(nanopb).max_count = 5];   // 选择探索精灵guid
+    required uint32 exploreEnd_ts                  = 5;                            // 探索结束时间
+    required uint32 explore_time                   = 6;                            // 探索时长
+}
+
+/// 精灵牧场列表
+message NanopbPokemonPastureInfo 
+{
+    required uint32 daily_speed_count      = 1; 
+    repeated NanopbPokemonPastureData list = 2 [(nanopb).max_count = 7];
+}
+
+///缘分数据
+message NanopbYuanfenData
+{
+    required uint32 yuanfen_lv    = 1;                           //当前缘分等级
+    repeated uint32 yuanfen_equip = 2 [(nanopb).max_count = 5];  //拥有下阶对应缘分装备
+}
+
+///主角培养属性
+message NanopbMainRoleCultureAttr
+{
+    required int32 all_hp               = 1;    //累计生命
+    required int32 all_phy_attack       = 2;    //累计物攻
+    required int32 all_phy_defense      = 3;    //累计物防
+    required int32 all_special_attack   = 4;    //累计特攻
+    required int32 all_special_defense  = 5;    //累计特防
+    required int32 add_hp               = 6;    //单次培养增加生命
+    required int32 add_phy_attack       = 7;    //单次培养增加物攻
+    required int32 add_phy_defense      = 8;    //单次培养增加物防
+    required int32 add_special_attack   = 9;    //单次培养增加特防
+    required int32 add_special_defense  = 10;   //单次培养增加特防
+}
+
+///主角信息
+message NanopbMainRoleInfo 
+{
+    required uint32 id                         = 1;                             //主角id
+    required uint32 guid                       = 2;                             //主角guid
+    repeated uint32 attr_data                  = 3 [(nanopb).max_count = 20];   //主角属性
+    repeated uint32 awaken_equip               = 4 [(nanopb).max_count = 4];    //觉醒装备
+    required NanopbMainRoleCultureAttr culture = 5;                             //主角培养属性
+    repeated NanopbYuanfenData yuanfen_info    = 6 [(nanopb).max_count = 6];    //主角缘分
+}
+
+///主角列表
+message NanopbMainRoleList
+{
+    repeated NanopbMainRoleInfo list = 1 [(nanopb).max_count = 20];
+} 
+
+///精灵培养属性
+message NanopbPokemonCultureAttr
+{
+    required int32 all_attack               = 1;    //累计攻击
+    required int32 all_hp                   = 2;    //累计生命
+    required int32 all_phy_defense          = 3;    //累计物防
+    required int32 all_magic_defense        = 4;    //累计特攻
+    required int32 add_attack               = 5;    //累计特防
+    required int32 add_hp                   = 6;    //单次培养增加生命
+    required int32 add_phy_defense          = 7;    //单次培养增加物攻
+    required int32 add_magic_defense        = 8;    //单次培养增加物防
+    required int32 cost_prop_num            = 9;    //培养类型
+    required int32 type                     = 10;   //培养类型
+    required int32 times                    = 11;   //培养次数
+}
+
+///精灵信息
+message NanopbPokemonInfo
+{
+    required uint32            id                  = 1;                              //将领id
+    required uint32            state               = 2;                              //将领状态; 0: 空闲; 1: 上阵; 2: 助阵
+    required uint32            slot                = 3;                              //上阵槽位
+    required uint32            type                = 4;                              //将领类型
+    required uint32            unused              = 5;                              //保留
+    repeated uint32            attr_data           = 6 [(nanopb).max_count = 54];    //将领属性
+    repeated uint32            awaken_equip        = 7 [(nanopb).max_count = 4];     //觉醒装备
+    required uint64            guid                = 8;                              //将领guid
+    required uint32            destiny_item_num    = 9;                              //消耗的天命石数量
+    repeated uint32            special_skill_prop  = 10 [(nanopb).max_count = 9];    //神兵技能概率
+    repeated uint32            special_skill_value = 11 [(nanopb).max_count = 9];    //神兵技能类型值
+    repeated uint32            gain_skill          = 12 [(nanopb).max_count = 20];   //精灵获得的技能
+    repeated uint32            select_skill        = 13 [(nanopb).max_count = 4];    //精灵选中使用的技能
+    required NanopbPokemonCultureAttr culture      = 14;                             //培养属性
+    repeated uint64            fetters_pokemon     = 15 [(nanopb).max_count = 6];    //精灵缘分(羁绊精灵)
+    required uint64            fetter_owner        = 16;                             //羁绊主人
+}
+
+///精灵列表
+message NanopbPokemonList
+{
+    repeated NanopbPokemonInfo list = 1 [(nanopb).max_count = 300];
+} 
+
+///精灵列表
+message NanopbPokemonTmpList
+{
+    repeated NanopbPokemonInfo list = 1 [(nanopb).max_count = 50];   
+}
+
+///上阵精灵列表
+message NanopbembattlePokemonList
+{
+    repeated uint64 list = 1 [(nanopb).max_count = 6];
+}
+
+///洞窟章阵容
+message NanopbCavernHeroList
+{
+    repeated NanopbPokemonInfo list = 1 [(nanopb).max_count = 6];
+}
+
+///背包信息(道具，觉醒，碎片，豪侠)
+message NanopbItemGrid 
+{
+    required uint32 id    = 1;    //物品ID
+    required uint32 type  = 2;    //物品类型
+    required uint32 num   = 3;    //物品数量
+    required uint32 ts    = 4;    //过期时间
+};
+
+//道具背包列表
+message NanopbPropBagList 
+{
+    repeated NanopbItemGrid list = 1 [(nanopb).max_count = 600];
+}
+
+//觉醒背包列表
+message NanopbAwakenBagList 
+{
+    repeated NanopbItemGrid list = 1 [(nanopb).max_count = 600];
+}
+
+//碎片背包列表
+message NanopbChipBagList 
+{
+    repeated NanopbItemGrid list = 1 [(nanopb).max_count = 600];
+}
+
+//宝物信息(宝物，穿戴宝物)
+message NanopbTreasureGrid 
+{
+    required uint32 id               = 1; //宝物ID
+    required uint32 quality          = 2; //宝物品质
+    required uint32 reserve          = 3; //保留字段
+    required uint32 strengthen_level = 4; //强化等级
+    required uint32 strengthen_exp   = 5; //强化经验
+    required uint32 jing_lian_lv     = 6; //精练等级
+}
+
+//珍宝背包列表
+message NanopbTreasureBagList
+{
+    repeated NanopbTreasureGrid list = 1 [(nanopb).max_count = 600];
+}
+
+//穿戴宝物列表
+message NanopbInstallTreasureBagList
+{
+     repeated NanopbTreasureGrid list = 1 [(nanopb).max_count = 12];
+}
+
+//装备信息
+message NanopbEquipGrid {
+    required uint32 strengthen_level = 1;           //强化等级
+    required uint32 upgrade_level    = 2;           //升星等级
+    required uint32 jing_lian_lv     = 3;           //精练等级
+    required uint32 quality          = 4;           //装备品质
+    required uint32 reserve          = 5;           //保留字段
+    required uint32 jing_lian_exp    = 6;           //精练经验
+    required uint32 id               = 7;           //物品ID
+    required uint32 add_silver       = 8;           //累计消耗的银两
+    required uint32 add_yuenBao      = 9;           //累计消耗的元宝
+    required uint32 lucky_val        = 10;          //幸运值
+    repeated uint32 attr             = 11 [(nanopb).max_count = 35];    //附加属性; 升星时需要记录
+    required uint32 upgrade_exp      = 12;          //升星经验
+    required uint32 add_fragment     = 13;          //累计消耗的碎片
+};
+
+//装备背包列表
+message NanopbEquipBagList 
+{
+    repeated NanopbEquipGrid list = 1 [(nanopb).max_count = 600];
+}
+
+//装备背包列表
+message NanopbTmpEquipBagList 
+{
+    repeated NanopbEquipGrid list = 1 [(nanopb).max_count = 200];
+}
+
+//穿戴装备列表
+message NanopbInstallEquipBagList 
+{
+    repeated NanopbEquipGrid list = 1 [(nanopb).max_count = 24];
+}
+
+
+enum SVR_TYPE
+{
+    CONN   = 1;
+    GAME   = 2;
+    BATTLE = 3;
+    RANK   = 4;
+    MAIL   = 5;
+    SOCIAL = 6;
+    REPORT = 7;
+    LOGIN  = 8;
+    CACHE  = 9;
+    DBPROC = 10;
+    AGENT  = 11;
+}
+
+enum MSG_ID
+{
+    BROADCAST_NOTIFY            = 30000; //广播
+    QUERY_PLAYER_INFO_REQUEST   = 30001; //玩家信息请求
+    QUERY_PLAYER_INFO_ANSWER    = 30002; //从DB中查询用户信息应答
+    SAVE_PLAYER_INFO_REQUEST    = 30003; //保存用户信息到DB请求
+    SAVE_PLAYER_INFO_ANSWER     = 30004; //保存用户信息到DB应答
+    SAVE_PLAYER_CACHE_REQUEST   = 30005; //保存用户数据到cache中
+    ARENA_FIGHT_NOTIFY          = 30006; //竞技场战斗通知
+    MAIL_GET_ITEM_REQUEST       = 30007; //获取邮件物品请求
+    MAIL_GET_ITEM_ANSWER        = 30008; //获取邮件物品应答
+
+    ARENA_RANK_BROADCAST        = 30021; //竞技场达到新排名广播
+    TASK_7DAY_BUY_ITEM_NOTIFY   = 30022; //7日任务购买物品通知
+    COMMON_RANK_REQUEST         = 30023; //游戏服转发到排行服的排行榜请求
+    COMMON_RANK_LIKE_REQUEST    = 30024; //游戏服转发到排行服的排行榜点赞请求
+    PLAYER_RECV_ENERGY_REQUEST  = 30025; //服务端接受精力请求
+    PLAYER_RECV_ENERGY_ANSWER   = 30026; //服务端接受精力应答
+    ARENA_FIGHT_REQUEST         = 30028; //竞技场信息请求
+    TOWER_RANK_NOTIFY           = 30032; //天梯排行通知
+
+    LEGION_APPLY_LIST_REQ             = 30033; //帮派申请列表请求
+    LEGION_MEMBER_LIST_REQ            = 30034; //帮派成员列表请求
+    LEGION_INFO_REQ                   = 30035; //帮派信息请求
+    LEGION_LIST_REQ                   = 30036; //帮派列表请求
+    OPENSRV_RANK_ACTV_INFO            = 30037; //开服排行活动数据
+    LEGION_MESSAGE_REQ                = 30038; //帮派留言请求
+    LEGION_RANK_LIST_REQ              = 30039; //帮派排行榜请求
+    LEGION_IMPEACH_REQ                = 30040; //帮派弹劾请求
+    LEGION_EVENT_MEMBER_INFO_REQ      = 30041; //帮派动态成员信息请求
+    LEGION_EVENT_MEMBER_INFO_ANSWER   = 30042; //帮派动态成员信息应答
+    LEGION_EVENT_MEMBER_INFO_REQ2     = 30043; //帮派动态成员信息请求2
+    LEGION_EVENT_MEMBER_INFO_ANSWER2  = 30044; //帮派动态成员信息应答2
+    ARENA_MULTI_FIGHT_REQUEST         = 30045;
+    ARENA_MULTI_FIGHT_NOTIFY          = 30046;
+    SAVE_LEGION_INFO_REQUEST          = 30047; //保存帮派信息到DB请求
+    SAVE_LEGION_INFO_ANSWER           = 30048; //保存帮派信息到DB应答
+    SAVE_NEW_LEGION_INFO_REQUEST      = 30049; //保存新帮派信息到DB请求
+    SAVE_NEW_LEGION_INFO_ANSWER       = 30050; //保存新帮派信息到DB应答
+    DEL_LEGION_REQUEST                = 30051; //从DB删除帮派请求
+    DEL_LEGION_ANSWER                 = 30052; //从DB删除帮派应答
+    IMPEACH_SUCCESS_MAIL_REQUEST      = 30053; //弹劾成功邮件请求
+    GET_TERRITORY_DEFEND_REQUEST      = 30054; //获取领取守卫的信息
+    GET_TERRITORY_DEFEND_ANSWER       = 30055;
+    TERRITORY_GATE_RANK_DATA          = 30056;
+    GET_TERRITORY_GATE_STAR_RANK      = 30057;
+    GET_TERRITORY_GATE_HURT_RANK      = 30058;
+    FIGHT_RECORD_REQUEST              = 30064;
+    FORTRESS_INFO_ANSWER              = 30065;
+    FORTRESS_DRAW_BOX_REQUEST         = 30066;
+    FORTRESS_INCOME_CHECK_REQUEST     = 30069;
+    FORTRESS_INCOME_CHECK_ANSWER      = 30070;
+    FORTRESS_INCOME_CONFIRM_REQUEST   = 30071;
+    FORTRESS_FIGHT_RECORD_ANSWER      = 30072;
+    FORTRESS_BUY_BUFF_REQUEST         = 30079;
+    FORTRESS_BUY_BUFF_COST            = 30080;
+    FORTRESS_FIGHT_REQUEST            = 30081;
+    FORTRESS_FIGHT_CONFIRM            = 30082;
+
+    // leo 添加 30101
+    OPEN_FUND_REQUEST                          = 30101; //开服基金请求
+    OPEN_FUND_ADD_REQUEST                      = 30102; //开服基金加人数
+    WELFARE_GET_REQUEST                        = 30103; //领取全民福利请求
+    OPEN_FUND_ADD_SHOW_REQUEST                 = 30104; //开服基金加显示人数
+    SAVE_LEGION_BOSS_KILL_COUNT_REQUEST        = 30105; //保存帮派副本击杀数请求
+    LEGION_BOSS_KILL_COUNT_RANK_REQUEST        = 30106; //帮派副本击杀数排行请求
+    SAVE_LEGION_BOSS_MAX_DAMAGE_REQUEST        = 30107; //保存帮派副本单次伤害请求
+    LEGION_BOSS_MAX_DAMAGE_RANK_REQUEST        = 30108; //帮派副本单次伤害排行请求
+    //LEGION_BOSS_MAX_DAMAGE_RANK_ANSWER       = 30109; //帮派副本单次伤害排行应答 - 弃用
+    LEGION_BOSS_LEGION_MAX_DAMAGE_RANK_REQUEST = 30110; //帮派副本帮内单次伤害排行请求
+    SAVE_LEGION_BOSS_FIRST_KILL_REQUEST        = 30111; //保存帮派副本首杀请求
+    SAVE_GALLANT_ENTRY_VALUE_REQUEST           = 30112; //保存豪侠传条目激活值
+    REBATE_RECEIVE_REQUEST                     = 30113; //领取返利请求
+    REBATE_RECEIVE_ANSWER                      = 30114; //领取返利应答
+    PRIVATE_CHAT_REQUEST                       = 30115; //私聊请求
+    SEND_MAIL_REQUEST                          = 30116; //发邮件请求
+    SEND_FRIEND_ENERGY_NOTIFY                  = 30117; //赠送好友体力通知
+    START_RAID_REQUEST                         = 30126; //副本战斗请求
+    FRIEND_DATA_UPDATE_NOTIFY                  = 30127; //好友信息更新通知
+
+    // bob 添加 30201
+    FORTRESS_GM_RESET_WEEKLY                   = 30201; //每周重置据点
+    KING_FIGHT_ANSWER                          = 30202;
+    WUDI_FIGHT_REQUEST                         = 30203;
+    WUDI_FIGHT_RESULT                          = 30204;
+    WUDI_INFO_ANSWER                           = 30205;
+    BUY_WUDI_FIGHT_CNT_REQUEST                 = 30206;
+    WUDI_INFO_NOTIFY                           = 30207;
+    BUY_WUDI_BOSS_BUFF                         = 30208;
+    BUY_WUDI_BOSS_BUFF_CONFIRM                 = 30209;
+    REBEL_DAILY_REWARD_STATUS_REQ              = 30210;
+    REBEL_DAILY_REWARD_STATUS_RESP             = 30211;
+    RAID_START_REQUEST                         = 30212;
+    MAIN_RAID_SWEEP_REQUEST                    = 30213;
+    CRUSADE_FORTRESS_ALL_INFO_ANSWER           = 30214;
+    RENAME_REQUEST                             = 30215;
+    RENAME_ANSWER                              = 30216;
+    CLOSE_CLIENT_REQUEST                       = 30217;
+    RELOAD_SERVER_INFO                         = 30250;
+    GM_RESET_WUDI                              = 30251;
+    ENTER_GAME_CONFIRM                         = 31001;
+    CLIENT_HEARTBEAT                           = 31002;
+    MAIL_INSERT_ALL                            = 31003;
+    LOAD_ALL_LEGION                            = 31004;
+    PLAYER_ENTER_GAME_NOTIFY                   = 31005;
+    PLAYER_EXIT_GAME_NOTIFY                    = 31006;
+    LOAD_OPEN_TS                               = 31007;
+
+    //排行请求
+    RANK_CAVERN_LAYERNUM            = 33001;
+
+    //game_srv --> social_srv
+    SOCIAL_PLAYER_DATA_SYNC         = 33100;    //game_srv给social_srv同步数据
+
+    //game_srv --> social_srv
+    LEGION_CREATE_ACK               = 33101;
+
+    //social_srv --> dbproc_srv
+    LEGION_BASE_INFO                = 33102;    //保存联盟基本信息
+    LEGION_BASE_INFO_ACK            = 33103;    //联盟基本信息回调
+    LEGION_MEMBER_INFO_REQ          = 33104;    //联盟成员信息
+    LEGION_MEMBER_INFO_ACK          = 33105;    //联盟成员信息回调
+    LEGION_MESSAGE_INFO_REQ         = 33106;    //联盟留言信息
+    LEGION_MESSAGE_INFO_ACK         = 33107;    //联盟留言信息回调
+    LEGION_EVENT_INFO_REQ           = 33108;    //联盟事件
+    LEGION_EVENT_INFO_ACK           = 33109;    //联盟事件回调
+
+    //social_srv --> game_srv
+    LEGION_DONATE_ACK               = 33150;    //捐献回调 game_srv -> social_srv
+    LEGION_DONATE_BOX_REQ           = 33151;    //捐献球
+    LEGION_LIMIT_SHOP_BUY_ACK       = 33152;    //联盟商店回调  game_srv --> social_srv
+    LEGION_ADD_ATTR                 = 33153;    //增加属性
+    LEGION_FIGHT_POWER_RANK         = 33154;    //联盟战斗力排行
+    LEGION_REFRESH_TASK_REQ         = 33155;    //联盟任务刷新 social_srv --> game_srv
+    LEGION_TASK_GET_REWARD_REQ      = 33156;    //联盟任务领取奖励 social_srv --> game_srv
+    SOCIAL_PLAYER_SYNC_GAME_REQ     = 33157;    //social_srv -> game_srv 同步数据
+
+    ACTIVITY_PROMPT_RANK_REWARD_REQ = 33180;    //获取排名信息请求
+    ACTIVITY_PROMPT_RANK_REWARD_ACK = 33181;    //获取排名信息回调
+    
+    LEGION_IMPEACH_ACK              = 33182;    //game_srv弹劾回调
+    SOCIAL_PLAYER_EXIT_NOTIFY       = 33183;    //玩家退出通知social_srv
+    ACTIVITY_PROMPT_REM_RANK_REQ    = 33184;    //移除排名请求
+    ACTIVITY_PROMPT_REM_RANK_ACK    = 33185;    //移除排名回调
+
+	FRIEND_SEND_ENERGY_REQ		    = 33200;	//赠送精力给好友，通知game更新任务
+    SHUTDOWN_SRV                    = 44444;    //关闭服务
+    UPDATE_SVRNODE_TYPE             = 44445;    //更新服务器节点类型
+    
+    REPORT_STAT                              = 50000; //统计信息上报
+    REPORT_ITEM_TRANS                        = 50001; //产出与消耗上报
+    REPORT_MORE_STAT                         = 50002; //增加uint32_t, uint64_t, string数组
+       
+    BATTLE_MIN                               = 60000;
+    PLAYER_CREATE_BATTLE                     = 60001; //玩家创建战斗
+    PLAYER_ENTER_BATTLE                      = 60002; //玩家进入战斗
+    BATTLE_MAX                               = 69999;
+
+    //dbproc-server
+    DBPROC_MIN                               = 71000;
+    DBPROC_QUERY_ARENA_INFO_REQ              = 71001;
+    DBPROC_QUERY_ARENA_INFO_ACK              = 71002;
+    DBPROC_SAVE_ARENA_INFO_REQ               = 71003;
+    DBPROC_SAVE_ARENA_INFO_ACK               = 71004;
+    DBPROC_QUERY_TACTICS_INFO_REQ            = 71005;
+    DBPROC_QUERY_TACTICS_INFO_ACK            = 71006;
+    DBPROC_SAVE_TACTICS_INFO_REQ             = 71007;
+    DBPROC_SAVE_TACTICS_INFO_ACK             = 71008;
+    DBPROC_QUERY_CAVERN_INFO_REQ             = 71009;
+    DBPROC_QUERY_CAVERN_INFO_ACK             = 71010;
+    DBPROC_SAVE_CAVERN_INFO_REQ              = 71011;
+    DBPROC_SAVE_CAVERN_INFO_ACK              = 71012;
+    DBPROC_QUERY_CHARACTOR_INFO_REQ          = 71013;
+    DBPROC_QUERY_CHARACTOR_INFO_ACK          = 71014;
+    DBPROC_SAVE_CHARACTOR_INFO_REQ           = 71015;
+    DBPROC_SAVE_CHARACTOR_INFO_ACK           = 71016;
+    DBPROC_SAVE_POKEMON_TOWER_REQ            = 71020;
+    DBPROC_QUERY_POKEMON_TOWER_REQ           = 71021;
+    DBPROC_QUERY_POKEMON_TOWER_ACK           = 71022;
+    DBPROC_QUERY_PASTURE_INFO_REQ            = 71023;
+    DBPROC_QUERY_PASTURE_INFO_ACK            = 71024;
+    DBPROC_SAVE_PASTURE_INFO_REQ             = 71025;
+    DBPROC_SAVE_PASTURE_INFO_ACK             = 71026;
+    DBPROC_QUERY_MAIN_ROLE_INFO_REQ          = 71027;
+    DBPROC_QUERY_MAIN_ROLE_INFO_ACK          = 71028;
+    DBPROC_SAVE_MAIN_ROLE_INFO_REQ           = 71029;
+    DBPROC_SAVE_MAIN_ROLE_INFO_ACK           = 71030;
+    DBPROC_QUERY_POKEMON_INFO_REQ            = 71031;
+    DBPROC_QUERY_POKEMON_INFO_ACK            = 71032;
+    DBPROC_QUERY_POKEMON_OTHER_ACK           = 71033;
+    DBPROC_SAVE_POKEMON_INFO_REQ             = 71034;
+    DBPROC_SAVE_POKEMON_INFO_ACK             = 71035;
+    DBPROC_SAVE_POKEMON_OTHER_REQ            = 71036;
+    DBPROC_SAVE_POKEMON_OTHER_ACK            = 71037;
+    DBPROC_SAVE_PLAY_SHOP_REQ                = 71040;
+    DBPROC_QUERY_PLAY_SHOP_REQ               = 71041;
+    DBPROC_QUERY_PLAY_SHOP_ACK               = 71042;
+    DBPROC_SAVE_CACHE_DATA_REQ               = 71043;
+    DBPROC_QUERY_BAG_INFO_REQ                = 71044;
+    DBPROC_QUERY_BAG_PART_ONE_ACK            = 71045;
+    DBPROC_QUERY_BAG_PART_TWO_ACK            = 71046;
+    DBPROC_QUERY_EQUIP_BAG_ACK               = 71047;
+    DBPROC_SAVE_BAG_PART_ONE_REQ             = 71048;
+    DBPROC_SAVE_BAG_PART_ONE_ACK             = 71049;
+    DBPROC_SAVE_EQUIP_BAG_REQ                = 71050;
+    DBPROC_SAVE_EQUIP_BAG_ACK                = 71051;
+    DBPROC_SAVE_BAG_PART_TWO_REQ             = 71052;
+    DBPROC_SAVE_BAG_PART_TWO_ACK             = 71053;
+    DBPROC_SAVE_LEGION_TASK_REQ              = 71054;
+    DBPROC_QUERY_LEGION_TASK_REQ             = 71055;
+    DBPROC_QUERY_LEGION_TASK_ACK             = 71056;
+    //DBPROC_QUERY_ACTIVITY_CONFIG_REQ       = 71057;
+    //DBPROC_QUERY_ACTIVITY_CONFIG_ACK       = 71058;
+    //DBPROC_SAVE_ACTIVITY_CONFIG_REQ        = 71059;
+    DBPROC_QUERY_ACTIVITY_DATA_REQ           = 71060;
+    DBPROC_QUERY_ACTIVITY_DATA_ACK           = 71061;
+    DBPROC_SAVE_ACTIVITY_DATA_REQ            = 71062;
+    DBPROC_SAVE_LEGION_DEL_MEMBER_CACHE_REQ  = 71063; //缓存删除成员
+    DBPROC_QUERY_LEGION_DEL_MEMBER_CACHE_REQ = 71064; //取出删除成员缓存
+    DBPROC_GET_ACTIVITY_INFO_REQ             = 71065; //请求活动数据
+    DBPROC_GET_ACTIVITY_INFO_ACK             = 71066; //活动数据应答
+    DBPROC_DEL_ACTIVITY_INFO_ACK			 = 71067; //后台删活动
+    DBPROC_UPDATE_USERSERVERINFO_REQ         = 71998; //更新玩家在game的状态
+    DBPROC_MAX = 71999;
+
+    //cross-server
+    CROSS_MIN                       = 81000;
+    CROSS_RESET_OPPONENT_LIST_REQ   = 81001;
+    CROSS_RESET_OPPONENT_LIST_ACK   = 81002;
+    CROSS_REPLACE_OPPONENT_RANK_REQ = 81003;
+    CROSS_REPLACE_OPPONENT_RANK_ACK = 81004;
+    CROSS_REFRESH_INTEGRAL_REQ      = 81005;
+    CROSS_REFRESH_INTEGRAL_ACK      = 81006;
+    CROSS_ARENA_TOPRANKING_NOTIFY   = 81007;
+    CROSS_MAX                       = 82999;
+
+    //game-server <==> agent-server
+    AGENT_MIN                       = 83000;
+    AGENT_SYNC_PLAYER_STATE         = 83001;
+    AGENT_NAX                       = 83999;
+
+    //server-to-server
+    S2S_REQ_CONN_REGISTER           = 99001;
+    S2S_ACK_CONN_REGISTER           = 99002;
+    S2S_REQ_CONN_HEARTBEAT          = 99003;
+    S2S_ACK_CONN_HEARTBEAT          = 99004;
+   
+    //web_server
+    WEB_CMD_MIN                     = 100000;
+    WEB_REQ_SET_LEVEL               = 100001;
+    WEB_ACK_SET_LEVEL               = 100002;
+    WEB_REQ_MAKE_ANNO               = 100003;
+    WEB_ACK_MAKE_ANNO               = 100004;
+    WEB_REQ_RESET_PLAYSHOP          = 100005;
+    WEB_ACK_RESET_PLAYSHOP          = 100006;
+    WEB_REQ_SET_RAID_GATE           = 100007;
+    WEB_ACK_SET_RAID_GATE           = 100008;
+    WEB_REQ_RELOAD_SVRCONF          = 100009;
+    WEB_ACK_RELOAD_SVRCONF          = 100010;
+    WEB_REQ_PLAYER_MUTE             = 100011;
+    WEB_ACK_PLAYER_MUTE             = 100012;
+    WEB_REQ_ADD_CHIP                = 100013;
+    WEB_ACK_ADD_CHIP                = 100014;
+    WEB_REQ_ADD_EXP                 = 100015;
+    WEB_ACK_ADD_EXP                 = 100016;
+    WEB_REQ_ADD_ITEM                = 100017;
+    WEB_ACK_ADD_ITEM                = 100018;
+    WEB_REQ_ADD_AWAKEN_ITEM         = 100019;
+    WEB_ACK_ADD_AWAKEN_ITEM         = 100020;
+    WEB_REQ_ADD_LEGION_EXP			= 100021;
+    WEB_ACK_ADD_LEGION_EXP			= 100022;
+    WEB_REQ_RESET					= 100023;
+    WEB_ACK_RESET					= 100024;
+    WEB_REQ_KICK_ROLE				= 100025;
+    WEB_ACK_KICK_ROLE				= 100026;
+    WEB_REQ_ACTVITITY_UPDATE        = 100027;
+    WEB_ACK_ACTVITITY_UPDATE        = 100028;
+    WEB_REQ_RECHARGE				= 100029;
+    WEB_ACK_RECHARGE		        = 100030;
+    WEB_REQ_CLEAR_FIRST_CHARGE		= 100031;
+    WEB_ACK_CLEAR_FIRST_CHARGE    	= 100032;
+    WEB_REQ_CLEAR_MONTH_CARD		= 100033;
+    WEB_ACK_CLEAR_MONTH_CARD		= 100034;
+    WEB_REQ_EXPIRE_MONTH_CARD		= 100035;
+    WEB_ACK_EXPIRE_MONTH_CARD		= 100036;
+    WEB_REQ_RESET_BATTLE            = 100037;
+    WEB_ACK_RESET_BATTLE            = 100038;
+    WEB_REQ_PAY_CHECK               = 100039;
+    WEB_ACK_PAY_CHECK               = 100040;
+    WEB_REQ_PAY_CONFIRM             = 100041;
+    WEB_ACK_PAY_CONFIRM             = 100042;
+    WEB_REQ_USE_CDK                 = 100043;
+    WEB_ACK_USE_CDK                 = 100044;
+    WEB_REQ_SEND_MAIL               = 100045;
+    WEB_ACK_SEND_MAIL               = 100046;
+    WEB_REQ_CHANGE_ATTR             = 100047;
+    WEB_ACK_CHANGE_ATTR             = 100048;
+    WEB_REQ_SET_GUIDE_IDX           = 100049;
+    WEB_ACK_SET_GUIDE_IDX           = 100050;
+    WEB_REQ_ADD_HERO                = 100051;
+    WEB_ACK_ADD_HERO                = 100052;
+    WEB_REQ_ADD_EQUIP               = 100053;
+    WEB_ACK_ADD_EQUIP               = 100054;
+    WEB_REQ_ADD_TREASURE            = 100055;
+    WEB_ACK_ADD_TREASURE            = 100056;
+    WEB_REQ_CLEAR_BAG               = 100057;
+    WEB_ACK_CLEAR_BAG               = 100058;
+    WEB_CMD_MAX                     = 200000;
+}
+
+message ProtoUpdateNode
+{
+    required int32 type   = 1;
+    required int32 nodeid = 2;
+}
+
+message MemberDelInfo
+{
+    required uint32 legion_out_ts = 1;
+    required uint64 player_id = 2;
+}
+
+message NanopbActPromptReward
+{
+    required uint32 ac_id = 1;
+}
+
+message NanopbMemberDelCache
+{
+    repeated MemberDelInfo info = 1[(nanopb).max_count = 64];
+    required bool is_begin = 2;
+}
+
+message NanopbActivityRankDataReq
+{
+    required uint32 score = 1;
+}
+
+message NanopbActivityRankDataAck
+{
+    required uint32 rank = 1;
+}
+
+message ActivityConfigInfo
+{
+    required uint32 ac_id    	= 1;
+    required uint32 ac_type  	= 2;
+    required uint32 template_id = 3;
+    required uint32 part_id  	= 4;
+    required uint32 begin_ts 	= 5;
+    required uint32 end_ts   	= 6;
+    required bool   reward_flag = 7;
+    required bool   clear_flag  = 8;
+}
+
+message ActivityDataInfo
+{
+    required uint32 ac_id          	= 1;
+    required uint32 ac_type 		= 2;
+    required uint32 template_id     = 3;
+    required uint32 score 			= 4;
+    required uint64 progress 		= 5;
+    required uint32 free_times 		= 6;
+    required uint32 history_count   = 7;
+    required uint32 begin_ts 		= 8;
+    required uint32 end_ts 			= 9;
+    required uint32 param1 			= 10;
+    required uint32 param2 			= 11;
+    required uint32 param3 			= 12;
+    required uint32 param4 			= 13;
+	required string str1 			= 14[(nanopb).max_size = 1024];
+	required string str2 			= 15[(nanopb).max_size = 1024];
+	required string str3 			= 16[(nanopb).max_size = 1024];
+}
+
+message NanopbSocialSyncReq
+{
+    required uint32 sync_event = 1;
+    optional uint64 legion_id = 2;
+    optional uint32 legion_out_ts = 3;
+    repeated uint32 legion_skill = 4[(nanopb).max_count = 10];
+    required string legion_name = 5[(nanopb).max_size = 49];
+}
+
+message NanopbQueryActivityConfigAck
+{
+    repeated ActivityConfigInfo info = 1[(nanopb).max_count = 200];
+}
+
+message NanopbSaveActivityConfigReq
+{
+    repeated ActivityConfigInfo info = 1[(nanopb).max_count = 200];
+}
+
+message NanopbActivityDataList
+{
+    repeated ActivityDataInfo info = 1[(nanopb).max_count = 200];
+}
+
+message NanopbSaveActivityDataReq
+{
+    required ActivityDataInfo info = 1;
+}
+
+message TaskInfo
+{
+    required uint32 id = 1;
+    required uint32 progress = 2;
+    required uint32 state = 3;
+    required uint32 count = 4;
+}
+
+message NanopbSaveLegionTaskReq
+{
+    repeated TaskInfo info = 1[(nanopb).max_count = 5];
+    required uint64 legion_id = 2;
+}
+
+message NanopbLegionTaskGetRewardReq
+{
+    required uint32 task_id = 1;
+    required uint32 legion_lv = 2;
+}
+
+message NanopbCommonRequest
+{}
+
+message NanopbCommonAnswer
+{
+    required int32 result = 1;
+}
+
+message NanopbQueryLegionTaskAck
+{
+    repeated TaskInfo info = 1[(nanopb).max_count = 5];
+    required uint64 legion_id = 2;
+}
+
+message NanopbConnRegisterReq
+{
+    required int32 srvType = 1;
+    required int32 srvId   = 2;
+}
+
+message NanopbConnRegisterAck
+{
+    required int32 srvType = 1;
+    required int32 srvId   = 2;
+}
+
+message NanopbConnHeartbeatReq
+{
+    required int32 srvType = 1;
+    required int32 srvId   = 2;
+}
+
+message NanopbConnHeartbeatAck
+{
+    required int32 srvType = 1;
+    required int32 srvId   = 2;
+}
+
+message ProtoPowerRankSystemNotify
+{
+    required uint32 rank_reward_flag = 1;
+}
+
+message ProtoShutdownSrv
+{
+    required uint32 shutdown = 1;
+}
+
+message ProtoPlayerEnterNotify 
+{
+	required uint32 level = 1;
+	required string names = 2[(nanopb).max_size = 64];
+}
+
+message ProtoPlayerExitNotify
+{
+    required uint32 reason = 1;
+    required uint32 level  = 2;
+}
+
+message ProtoTowerRankNotify
+{
+    required uint32 rank = 1;
+}
+
+message ProtoPlayerEnterGame 
+{
+    required uint32	channelid       = 1;
+    required uint32	platformid      = 2;
+    required uint32	rebate_money    = 3;
+    required uint32	rebate_deadline = 4;
+}
+
+message ProtoPlayerDbInfoReq 
+{
+    required uint32 region_id       = 1;
+    required uint32 userid          = 2;
+    required uint64 player_id       = 3;
+    required uint32 channelid       = 4;
+    required uint32 platformid      = 5;
+    required uint32 rebate_money    = 6;
+    required uint32 rebate_deadline = 7;
+}
+
+message ProtoLegionDBInfo
+{
+    required uint32	is_delete     = 1;
+    required uint64	legion_id     = 2;
+    required string	name          = 3[(nanopb).max_size = 64];
+    required uint32	create_time   = 4;
+    required uint32	lv            = 5;
+    required uint64	head_id       = 6;
+    required uint32	member_num    = 7;
+    required uint32	worship_value = 8;
+    required uint32	worship_count = 9;
+    required uint32	data_size     = 10;
+    required string	data          = 11[(nanopb).max_size = 1];
+}
+
+message ProtoLegionSaveAnswer
+{
+    required uint64 legion_id = 1;
+}
+
+message ProtoCommonResult
+{
+    required uint32 result = 1;
+}
+
+message ProtoSaveAnswer
+{
+    required uint64 player_id = 1;
+}
+
+message ProtoTask7DayBuyItemNotify
+{
+    required uint32 task_id = 1;
+}
+
+message ProtoCommonRankReq
+{
+    required uint32 type            = 1;
+    required uint32 left_like_count = 2;
+}
+
+message ProtoCommonRankLikeReq
+{
+    required uint32 type            = 1;
+    required uint32 left_like_count = 2;
+    required uint64 like_player_id  = 3;
+    required uint32 silver          = 4;
+}
+
+message ProtoPlayerRecvEnergyReq
+{
+    required uint32 energy   = 1;
+    repeated uint64 playerid = 2 [(nanopb).max_count = 100];
+}
+
+message ProtoPlayerRecvEnergyAnswer
+{
+    required uint32 energy   = 1;
+    repeated uint64 playerid = 2 [(nanopb).max_count = 100];
+}
+
+message ProtoLegionApplyListReq
+{
+    repeated uint64 playerid = 1 [(nanopb).max_count = 100];
+}
+
+message ProtoLegionMemberListReq
+{
+    repeated uint64 playerid = 1 [(nanopb).max_count = 48];
+    repeated uint32 position = 2 [(nanopb).max_count = 48];
+    repeated uint32 sum_donate = 3 [(nanopb).max_count = 48];
+}
+
+message ProtoLegionInfoReq
+{
+    required string name              = 1 [(nanopb).max_size = 64];
+    required uint32 logo_id           = 2;
+    required uint32 frame_id          = 3;
+    required uint32 level             = 4;
+    required uint32 exp               = 5;
+    required uint32 member_num        = 6;
+    required uint64 head_id           = 7;
+    required string bulletin          = 8 [(nanopb).max_size = 64];
+    required string declaration       = 9 [(nanopb).max_size = 64];
+    required uint32 position          = 10;
+    required uint32 worship_value     = 11;
+    required uint32 worship_count     = 12;
+    required uint64 impeach_player_id = 13;
+    required uint32 impeach_ts        = 14;
+    required uint32 auto_del_ts       = 15;
+    required uint32 accept            = 17;
+    repeated uint32 accept_value      = 18 [(nanopb).max_count = 10];
+    required uint64 legion_id         = 19;
+    required uint64 fight_power       = 20;
+}
+
+message LegionMessage
+{
+    required uint32 message_id = 1;
+    required uint64 player_id  = 2;
+    required uint32 position   = 3;
+    required uint32 ts         = 4;
+    required string content    = 5 [(nanopb).max_size = 128];
+}
+
+message ProtoLegionMessageReq
+{
+    repeated LegionMessage lm                = 1 [(nanopb).max_count = 30];
+    required uint32        sticky_message_id = 2;
+}
+
+message ProtoLegionImpeachReq
+{
+    required uint64 player_id  = 1;
+    required uint32 offline_ts = 2;
+}
+
+message ProtoLegionEventMemberInfoReq
+{
+    required uint32 event_id  = 1; 
+    required uint64 legion_id = 2;
+    required uint64 player_id = 3;
+}
+
+message ProtoLegionEventMemberInfoAnswer
+{
+    required uint32 event_id  = 1;
+    required uint64 legion_id = 2;
+    required uint32 role_id   = 3;
+    required string name      = 4 [(nanopb).max_size = 64];
+}
+
+message ProtoLegionEventMemberInfoReq2
+{
+    required uint32 event_id     = 1;
+    required uint64 legion_id    = 2;
+    required uint64 player_id    = 3;
+    required uint32 head_role_id = 4;
+    required string head_name    = 5 [(nanopb).max_size = 64];
+}
+
+message ProtoLegionEventMemberInfoAnswer2
+{
+    required uint32 event_id     = 1;
+    required uint64 legion_id    = 2;
+    required uint32 role_id      = 3;
+    required string name         = 4 [(nanopb).max_size = 64];
+    required uint32 head_role_id = 5;
+    required string head_name    = 6 [(nanopb).max_size = 64];
+}
+
+message ProtoImpeachSuccessMailReq
+{
+    required uint64 impeach_id  = 1;
+    required uint64 head_id     = 2;
+    required string legion_name = 3 [(nanopb).max_size = 64];
+}
+
+message ProtoSpecialSkill
+{
+    repeated uint32 special_skill_prop  = 1; //神兵技能概率
+    repeated uint32 special_skill_value = 2; //神兵技能类型值
+}
+
+message ProtoOpenFundAddBuyNum
+{
+    required uint32 add_num = 1;
+}
+
+message ProtoOpenFundAddShowNum
+{
+    required uint32 add_num = 1;
+}
+
+message ProtoUniversalWelfareGetReq
+{
+    required uint32 fund_id = 1;
+    required uint32 buy_num = 2;
+}
+
+message ProtoLegionBossChangeValReq
+{
+    required uint64 player_id = 1;
+    required uint32 stage     = 2;
+    required uint64 value     = 3;
+}
+
+message ProtoRenameReq
+{
+    required string	name         = 1 [(nanopb).max_size = 64];
+    required uint32 consume_type = 2;
+}
+
+message ProtoCloseClientReq
+{
+    required uint32 reason = 1;
+}
+
+message ProtoChat
+{
+    required uint32 channel          = 1;
+    required string sender_name      = 2 [(nanopb).max_size = 64];
+    required uint32 mainrole_card_id = 3;
+    required uint32 level            = 4;
+    required uint32 vip_level        = 5;
+    required uint64 fight_power      = 6;
+    required uint64 legion_id        = 7;
+    required string legion_name      = 8 [(nanopb).max_size = 64];
+    required string content          = 9 [(nanopb).max_size = 255];
+    required uint32 fashion_id       = 10;
+    required uint64 receiver_id      = 11;
+    required string receiver_name    = 12 [(nanopb).max_size = 64];
+}
+
+message ProtoSendFriendEnergy 
+{
+    required uint32 count = 1;
+}
+
+message ProtoFriendDataUpdateNotify 
+{
+	required uint32 data_id = 1;
+    required uint64 value   = 2;
+    required string str     = 3 [(nanopb).max_size = 64];
+}
+
+message ProtoReloadServerInfo 
+{
+    required uint32 region_id = 1;
+}
+
+message ProtoPlayerUpdate 
+{
+    required uint32 channelid  = 1;
+    required uint32 platformid = 2;
+    required uint32 state      = 3;
+}
+
+message PokemonTowerData
+{
+    required  uint64  playerid         = 1;
+    required  uint32  cur_floor        = 2;
+    required  uint32  cur_raid_idx     = 3;
+    repeated  uint32  cur_floor_stars  = 4 [(nanopb).max_count = 3];
+    required  uint32  history_floor    = 5;
+    required  uint32  history_raid_idx = 6;
+    required  uint32  reset_cnt        = 7;
+    required  uint32  total_star       = 8;
+    required  uint32  use_star         = 9;
+    required  uint32  history_star     = 10;
+    required  uint32  serial_id        = 11;
+    required  uint32  buff_id_1        = 12;
+    required  uint32  buff_id_2        = 13;
+    required  uint32  buff_id_3        = 14;
+    repeated  uint32  passive_skill    = 15 [(nanopb).max_count = 25];
+    required  uint32  elite_cnt        = 16;
+    required  uint32  elite_buy_cnt    = 17;
+    required  uint32  elite_max_bossid = 18;
+    required  uint32  elite_remain_cnt = 19;
+    required  uint32  star3_floor      = 20;
+    required  uint32  star3_raid_idx   = 21;
+}
+
+message NanopbQueryArenaDataReq
+{
+    required int64 playerid = 1;
+}
+
+message NanopbQueryArenaDataAck
+{
+    required int64               playerid = 1;
+    required NanopbPlayerArena   info     = 2;
+    repeated ArenaOpponentEntity opponent = 5 [(nanopb).max_count = 5];
+    repeated ArenaRecordEntity   record   = 4 [(nanopb).max_count = 10];
+}
+
+message NanopbSaveArenaDataReq
+{
+    required int64               playerid = 1;
+    required NanopbPlayerArena   info     = 2;
+    repeated ArenaOpponentEntity opponent = 5 [(nanopb).max_count = 5];
+    repeated ArenaRecordEntity   record   = 4 [(nanopb).max_count = 10];
+}
+
+message NanopbSaveArenaDataAck
+{
+    required int64 playerid = 1;
+    required int32 result   = 2;
+}
+
+message NanopbResetOpponentListReq
+{
+    required int64 playerid   = 1;
+    required int64 oppo1pid   = 2;
+    required int64 oppo2pid   = 3;
+    required int64 oppo3pid   = 4;
+    required int64 oppo4pid   = 5;
+    required int64 oppo5pid   = 6;
+    required int32 fullreset  = 7;
+    required int64 fightpower = 8;
+    required int32 curranking = 9;
+    required int32 integral   = 10;
+}
+
+message NanopbResetOpponentListAck
+{
+    repeated ArenaOpponentEntity list = 1 [(nanopb).max_count = 10];
+    required int32 fullreset = 2;
+}
+
+message NanopbRefreshIntegralReq
+{
+    required int64 oppo1id = 1;
+    required int64 oppo2id = 2;
+    required int64 oppo3id = 3;    
+    required int64 oppo4id = 4;    
+    required int64 oppo5id = 5;    
+}
+
+message NanopbRefreshIntegralAck
+{
+    required int64 oppo1id   = 1;
+    required int64 oppo2id   = 2;
+    required int64 oppo3id   = 3;
+    required int64 oppo4id   = 4;
+    required int64 oppo5id   = 5;
+    required int32 integral1 = 6;
+    required int32 integral2 = 7;
+    required int32 integral3 = 8;   
+    required int32 integral4 = 9;   
+    required int32 integral5 = 10;   
+}
+
+message NanopbArenaTopRankingNotify
+{
+    required int32 rankNo = 1;
+}
+
+message NanopbQueryTacticsDataReq
+{
+    required int64 playerid = 1;
+}
+
+message NanopbQueryTacticsDataAck
+{
+    repeated TacticsEntity list = 1 [(nanopb).max_count = 24];
+}
+
+message NanopbSaveTacticsDataReq
+{
+    repeated TacticsEntity list = 1 [(nanopb).max_count = 24];
+}
+
+message NanopbSaveTacticsDataAck
+{
+    required int64 playerid = 1;
+    required int32 result   = 2;
+}
+
+message NanopbQueryCavernDataReq
+{
+    required int64 playerid = 1;
+}
+
+message NanopbQueryCavernDataAck
+{
+    required CavernBaseEntity     info       = 1;
+    repeated CavernGridEntity     grid       = 2 [(nanopb).max_count = 30];
+    repeated CavernBagGridEntity  bag        = 3 [(nanopb).max_count = 15];
+    repeated CavernEmbattleEntity emb        = 4 [(nanopb).max_count = 6];
+    required int32                boxLayer   = 5;
+    required int32                boxDropId  = 6;
+    required int32                rewardOver = 7;
+    repeated int32                skillids   = 8 [(nanopb).max_count = 20];
+}
+
+message NanopbSaveCavernDataReq
+{
+    required CavernBaseEntity     info       = 1;
+    repeated CavernGridEntity     grid       = 2 [(nanopb).max_count = 30];
+    repeated CavernBagGridEntity  bag        = 3 [(nanopb).max_count = 15];
+    repeated CavernEmbattleEntity emb        = 4 [(nanopb).max_count = 6];
+    required int32                boxLayer   = 5;
+    required int32                boxDropId  = 6;
+    required int32                rewardOver = 7;
+    repeated int32                skillids   = 8 [(nanopb).max_count = 20];
+}
+
+message NanopbSaveCavernDataAck
+{
+    required int32 result = 1;
+}
+
+// 精灵性格
+message NanopbQueryCharactorDataReq
+{
+    required int64 playerid = 1;
+}
+
+message NanopbQueryCharactorDataAck
+{
+     repeated NanopbCharacterCultureInfo list = 1 [(nanopb).max_count = 4];
+}
+
+message NanopbSaveCharactorDataReq
+{
+    repeated NanopbCharacterCultureInfo list = 1 [(nanopb).max_count = 4];
+}
+
+message NanopbSaveCharactorDataAck
+{
+    required int64 playerid = 1;
+    required int32 result   = 2;
+}
+
+// 精灵塔
+message NanopbSavePokemonTowerReq
+{
+    required PokemonTowerData info = 1;
+}
+message NanopbQueryPokemonTowerReq
+{
+    required int64 playerid = 1;
+}
+message NanopbQueryPokemonTowerAck
+{
+    required PokemonTowerData info = 1;
+}
+
+// 精灵牧场
+message NanopbQueryPastureDataReq
+{
+    required int64 playerid = 1;
+}
+
+message NanopbQueryPastureDataAck
+{
+    required uint32 daily_speed_count = 1;        
+    repeated NanopbPokemonPastureData list = 2 [(nanopb).max_count = 7];    
+}
+
+message NanopbSavePastureDataReq
+{
+    required uint32 daily_speed_count = 1;        
+    repeated NanopbPokemonPastureData list = 2 [(nanopb).max_count = 7];
+}
+
+message NanopbSavePastureDataAck
+{
+    required int64 playerid = 1;
+    required int32 result   = 2;
+}
+
+// 主角
+message NanopbQueryMainRoleDataReq
+{
+    required int64 playerid = 1;
+}
+
+message NanopbQueryMainRoleDataAck
+{
+    required uint32 act_main_role    = 1;       
+    repeated NanopbMainRoleInfo list = 2 [(nanopb).max_count = 20];
+}
+
+message NanopbSaveMainRoleDataReq
+{   required uint32 act_main_role    = 1; 
+    repeated NanopbMainRoleInfo list = 2 [(nanopb).max_count = 20];
+}
+
+message NanopbSaveMainRoleDataAck
+{
+    required int64 playerid = 1;
+    required int32 result   = 2;
+}
+
+// 精灵
+message NanopbQueryPokemonDataReq
+{
+    required int64 playerid = 1;
+}
+
+message NanopbQueryPokemonDataAck
+{
+    required int32 idx                               = 1;
+    repeated NanopbPokemonInfo list                  = 2 [(nanopb).max_count = 50];
+}
+
+message NanopbQueryPokemonOtherAck
+{
+    repeated uint64 embattle_hero                    = 1 [(nanopb).max_count = 6];
+    repeated NanopbPokemonInfo cavern_hero           = 2 [(nanopb).max_count = 6];
+}
+
+message NanopbSavePokemonDataReq
+{
+    required int32 idx                               = 1;
+    repeated NanopbPokemonInfo list                  = 2 [(nanopb).max_count = 50];
+}
+
+message NanopbSavePokemonDataAck
+{
+    required int64 playerid = 1;
+    required int32 result   = 2;
+}
+
+message NanopbSavePokemonOtherReq
+{
+    repeated uint64 embattle_hero                    = 1 [(nanopb).max_count = 6];
+    repeated NanopbPokemonInfo cavern_hero           = 2 [(nanopb).max_count = 6];
+}
+
+message NanopbSavePokemonOtherAck
+{
+    required int64 playerid = 1;
+    required int32 result   = 2;
+}
+
+// 背包
+message NanopbQueryBagDataReq
+{
+    required int64 playerid = 1;
+}
+
+message NanopbQueryBagPartOneDataAck
+{
+    repeated NanopbItemGrid prop_list            = 1 [(nanopb).max_count = 600];
+    repeated NanopbItemGrid awaken_list          = 2 [(nanopb).max_count = 600];
+    repeated NanopbItemGrid chip_list            = 3 [(nanopb).max_count = 600];
+}
+
+message NanopbQueryBagPartTwoDataAck
+{
+    repeated NanopbTreasureGrid treasure_list    = 1 [(nanopb).max_count = 600];
+    repeated NanopbTreasureGrid install_treasure = 2 [(nanopb).max_count = 12];
+    repeated NanopbEquipGrid install_equip       = 3 [(nanopb).max_count = 24];
+}
+
+message NanopbQueryEquipBagDataAck
+{
+    required int32 idx            = 1;
+    repeated NanopbEquipGrid list = 2 [(nanopb).max_count = 200];
+}
+
+message NanopbSaveBagPartOneDataReq
+{
+    repeated NanopbItemGrid prop_list            = 1 [(nanopb).max_count = 600];
+    repeated NanopbItemGrid awaken_list          = 2 [(nanopb).max_count = 600];
+    repeated NanopbItemGrid chip_list            = 3 [(nanopb).max_count = 600];
+}
+
+message NanopbSaveBagPartOneDataAck
+{
+    required int64 playerid = 1;
+    required int32 result   = 2;
+}
+
+message NanopbSaveBagPartTwoDataReq
+{
+    repeated NanopbTreasureGrid treasure_list    = 1 [(nanopb).max_count = 600];
+    repeated NanopbTreasureGrid install_treasure = 2 [(nanopb).max_count = 12];
+    repeated NanopbEquipGrid install_equip       = 3 [(nanopb).max_count = 24];
+}
+
+message NanopbSaveBagPartTwoDataAck
+{
+    required int64 playerid = 1;
+    required int32 result   = 2;
+}
+
+message NanopbSaveEquipBagDataReq
+{
+    required int32 idx            = 1;
+    repeated NanopbEquipGrid list = 2 [(nanopb).max_count = 200];
+}
+
+message NanopbSaveEquipBagDataAck
+{
+    required int64 playerid = 1;
+    required int32 result   = 2;
+}
+
+
+message LegionAcceptance
+{
+	required uint32 type = 1;
+	repeated uint32 value = 2;
+}
+
+message LegionBaseInfo
+{
+	required string bulletin = 1[(nanopb).max_size = 129];						// 公告
+	required string declaration = 2[(nanopb).max_size = 65];					// 宣言
+	repeated uint32 attr_data = 3[(nanopb).max_count = 8];						// 帮派属性
+	repeated uint32 skill_levels = 4[(nanopb).max_count = 10];					// 帮派技能等级
+	required uint64 impeach_player_id = 5;				                        // 弹劾人
+	required uint32 impeach_ts = 6;						                        // 弹劾生效时间戳
+	required uint32 next_reset_ts_0clock = 7;			                        // 下次0点重置时间
+	required uint32 message_id = 8;						                        // 已用留言ID
+	required uint32 sticky_message_id = 9;				                        // 置顶留言ID
+	required uint32 create_ts = 10;						                        // 创建时间戳
+	required uint32 uplevel_ts = 11;					                        // 升级时间戳
+	required uint64 id = 12;							                        // 帮派id
+	required string name = 13[(nanopb).max_size = 49];							// 帮派名字
+    required uint64 auto_del_ts = 14;                                           // 自动解散时间
+    repeated uint64 applicants = 15[(nanopb).max_count = 100];                  // 申请者
+}
+
+message NanopbLegionBaseReq
+{
+	required uint32 ev = 1;
+	required LegionBaseInfo info = 2;
+    optional uint64 begin_id = 3;
+}
+
+message NanopbLegionBaseAck
+{
+    required LegionBaseInfo info = 1;
+}
+
+message LegionMemberInfo
+{
+    required uint64 player_id = 1;
+    required uint32 position = 2;
+    required uint32 limit_shop_flag = 3;
+    required uint64 join_ts = 4;
+    repeated uint32 boss_reward = 5[(nanopb).max_count = 32];
+    repeated uint64 boss_max_damage = 6[(nanopb).max_count = 32];
+    required uint32 message_read_flag = 7;
+    required uint32 limit_shop_read_flag = 8;
+    required uint32 sum_donate = 9;
+}
+
+message LegionEventInfo
+{
+    required uint32 ev_id = 1;
+    required uint64 ts = 2;
+    repeated string key = 3[(nanopb).max_size = 16, (nanopb).max_count = 5];
+    repeated string val = 4[(nanopb).max_size = 64, (nanopb).max_count = 5];
+}
+
+message LegionMessageInfo
+{
+    required uint32 id = 1;
+    required uint64 ts = 2;
+    required uint64 player_id = 3;
+    required uint32 position = 4;
+    required string content = 5[(nanopb).max_size = 128];
+}
+
+message NanopbLegionMemberReq
+{
+    required uint32 ev = 1;
+    required uint64 legion_id = 2;
+    repeated LegionMemberInfo info = 3[(nanopb).max_count = 64];
+}
+
+message NanopbLegionMemberAck
+{
+    required uint64 legion_id = 1;
+    repeated LegionMemberInfo info = 2[(nanopb).max_count = 64];
+}
+
+message NanopbLegionEventReq
+{
+    required uint32 ev = 1;
+    required uint64 legion_id = 2;
+    repeated LegionEventInfo info = 3[(nanopb).max_count = 128];
+}
+
+message NanopbLegionEventAck
+{
+    required uint64 legion_id = 1;
+    repeated LegionEventInfo info = 2[(nanopb).max_count = 128];
+}
+
+message NanopbLegionMessageReq
+{
+    required uint32 ev = 1;
+    required uint64 legion_id = 2;
+    repeated LegionMessageInfo info = 3[(nanopb).max_count = 128];
+}
+
+message NanopbLegionMessageAck
+{
+    required uint64 legion_id = 1;
+    repeated LegionMessageInfo info = 2[(nanopb).max_count = 128];
+}
+
+message NanopbLegionDonateAck
+{
+    required uint32 donate_id = 1;
+    required bool is_crit = 2;
+}
+
+message NanopbLegionAddAttr
+{
+    repeated uint32 attr_id = 1[(nanopb).max_count = 8];
+    repeated uint32 attr_val = 2[(nanopb).max_count = 8];
+}
+
+message NanopbLegionTaskRefresh
+{
+    required bool system = 1;
+    required uint32 type = 2;
+    required uint32 star = 3;
+    required uint32 legion_lv = 4;
+    required uint32 legion_id = 5;
+}
+
+message NanopbFriendSendEnergyReq
+{
+    required uint32 times = 1;
+}
+
+message NanopbUserServerInfoReq 
+{
+    required uint32 user_id		= 1;
+    required uint64 player_id	= 2;
+    required uint32 server_id	= 3;
+    required uint32 part_id		= 4;
+    required uint32 role_id		= 5;
+    required uint64 port		= 6;
+    required uint32 level		= 7;
+    required string name		= 8[(nanopb).max_size = 64];
+}
+
+message NanopbSyncPlayerState
+{
+    required uint32 userid   = 1;
+    required uint64 playerid = 2;
+    required int32  partid   = 3;
+    required int32  online   = 4;
+}
+
+message NanopbDelActivityInfoAck
+{
+    repeated uint32 id			= 1[(nanopb).max_count = 100];
+}

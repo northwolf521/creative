@@ -1,0 +1,7 @@
+import "nanopb.proto";
+
+message Example {
+   required int32  value1 = 1;
+   optional string value2 = 2 [(nanopb).max_size  = 100];
+   repeated int32  value3 = 3 [(nanopb).max_count = 100];
+}
